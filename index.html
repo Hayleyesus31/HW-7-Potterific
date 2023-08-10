@@ -1,1 +1,128 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<title>Harry Potter Character Table</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
 
+th, td {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+</style>
+</head>
+<body>
+
+<h1>Harry Potter Character Table</h1>
+
+<table id="characters">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>House</th>
+      <th>Year</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<div id="buttons">
+</div>
+
+<button id="reset">Reset</button>
+
+<script>
+$(document).ready(function() {
+  // Get the Harry Potter characters from the JavaScript array
+  var characters = [
+    {
+      "name": "Harry Potter",
+      "house": "Gryffindor",
+      "year": "1st"
+    },
+    {
+      "name": "Hermione Granger",
+      "house": "Gryffindor",
+      "year": "1st"
+    },
+    {
+      "name": "Ron Weasley",
+      "house": "Gryffindor",
+      "year": "1st"
+    },
+    {
+      "name": "Draco Malfoy",
+      "house": "Slytherin",
+      "year": "1st"
+    },
+    {
+      "name": "Neville Longbottom",
+      "house": "Gryffindor",
+      "year": "1st"
+    },
+    {
+      "name": "Luna Lovegood",
+      "house": "Ravenclaw",
+      "year": "2nd"
+    }
+  ];
+
+  // Create the table rows
+  var rows = [];
+  for (var i = 0; i < characters.length; i++) {
+    rows.push("<tr><td>" + characters[i].name + "</td><td>" + characters[i].house + "</td><td>" + characters[i].year + "</td></tr>");
+  }
+
+  // Append the table rows to the table body
+  $("#characters tbody").append(rows);
+
+  // Create a unique list of house names
+  var houses = [];
+  for (var i = 0; i < characters.length; i++) {
+    if (!houses.includes(characters[i].house)) {
+      houses.push(characters[i].house);
+    }
+  }
+
+  // Create buttons for each house name
+  for (var i = 0; i < houses.length; i++) {
+    var button = $("<button>" + houses[i] + "</button>");
+    button.click(function() {
+      filterTableByHouse(houses[i]);
+    });
+    $("#buttons").append(button);
+  }
+
+  // Create a reset button
+  $("#reset").click(function() {
+    filterTableByHouse("");
+  });
+
+  // Initialize the table with all rows visible
+  filterTableByHouse("");
+});
+
+function filterTableByHouse(house) {
+  // Hide all rows
+  $("#characters tbody tr").hide();
+
+  // Show rows where the house name matches the filter
+  if (house !== "") {
+    $("#characters tbody tr").filter("[data-house='" + house + "']").show();
+  } else {
+    // Show all rows
+    $("#characters tbody tr").show();
+  }
+
+  // Update the row colors
+  updateRowColors();
+}
